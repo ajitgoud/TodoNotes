@@ -27,10 +27,6 @@ class TasksViewModel @Inject constructor(
 
     val preferenceFlow = preferencesManager.preferencesFlow
 
-
-    val sortOrder = MutableStateFlow(SortOrder.BY_DATE)
-    val hideCompleted = MutableStateFlow(false)
-
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
