@@ -9,5 +9,24 @@
         android:id="@+id/taskFragment"
         android:name="com.developer.ajit.todonotes.ui.tasks.TaskFragment"
         android:label="TaskFragment"
-        tools:layout="@layout/fragment_tasks" />
+        tools:layout="@layout/fragment_tasks">
+        <action
+            android:id="@+id/action_taskFragment_to_addEditTaskFragment"
+            app:destination="@id/addEditTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addEditTaskFragment"
+        android:name="com.developer.ajit.todonotes.ui.tasks.edittask.AddEditTaskFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_add_edit_task">
+        <argument
+            android:name="task"
+            android:defaultValue="@null"
+            app:argType="com.developer.ajit.todonotes.data.Task"
+            app:nullable="true" />
+
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 </navigation>

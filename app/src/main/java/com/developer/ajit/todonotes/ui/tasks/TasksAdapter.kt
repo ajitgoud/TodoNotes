@@ -9,10 +9,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.developer.ajit.todonotes.data.Task
 import com.developer.ajit.todonotes.databinding.ItemTaskBinding
 
-class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(DiffCallback()) {
+class TasksAdapter(private val listener: OnItemClickListener) :
+    ListAdapter<Task, TasksAdapter.TaskViewHolder>(DiffCallback()) {
 
-    class TaskViewHolder(private val binding: ItemTaskBinding) :
+    inner class TaskViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = bindingAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onItemClick(task)
+                    }
+                }
+                checkBoxCompleted.setOnClickListener {
+                    val position = bindingAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onCheckBoxClick(task, checkBoxCompleted.isChecked)
+                    }
+                }
+            }
+        }
 
         fun bind(task: Task) {
             binding.apply {
@@ -21,6 +41,7 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(DiffCallback
                 textViewName.paint.isStrikeThruText = task.completed
                 labelPriority.isVisible = task.important
             }
+
 
         }
     }
@@ -34,6 +55,12 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.TaskViewHolder>(DiffCallback
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(task: Task)
+        fun onCheckBoxClick(task: Task, isChecked: Boolean)
+    }
+
 
     class DiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean =
